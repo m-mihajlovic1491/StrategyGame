@@ -1,0 +1,6 @@
+@StrategyGame_HostAddress = http://localhost:5272
+
+GET {{StrategyGame_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
