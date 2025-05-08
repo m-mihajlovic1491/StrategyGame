@@ -1,6 +1,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using StrategyGame.Data;
+using System;
 
 namespace StrategyGame
 {
@@ -22,8 +23,24 @@ namespace StrategyGame
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-           
-            
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<StrategyGameContext>();
+                
+                var pendingMigrations = dbContext.Database.GetPendingMigrations();
+                if (pendingMigrations.Any())
+                {
+                    Console.WriteLine("Applying pending migrations...");
+                    dbContext.Database.Migrate();
+                }
+                else
+                {
+                    Console.WriteLine("No pending migrations.");
+                }
+            }
+
+
             app.UseSwagger();
             app.UseSwaggerUI();
             
