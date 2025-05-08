@@ -13,7 +13,7 @@ namespace StrategyGame.Extensions
                 Id = hero.Id,
                 Name = hero.Name,
                 EquippedArmor = hero.EquippedArmor,
-                EquippedWeapon = new WeaponViewModel
+                EquippedWeapon = hero.EquippedWeapon is null ? null : new WeaponViewModel
                 {
                     Id = hero.EquippedWeaponNavigation.Id,
                     Damage = hero.EquippedWeaponNavigation.Damage,
