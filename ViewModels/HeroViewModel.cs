@@ -10,9 +10,9 @@ namespace StrategyGame.ViewModels
 
         public string? Name { get; set; }
 
-        public int? LegionId { get; set; }
+        public LegionViewModel? Legion { get; set; }
 
-        public int? EquippedArmor { get; set; }
+        public ArmorViewModel? EquippedArmor { get; set; }
 
         public WeaponViewModel? EquippedWeapon { get; set; }
 
