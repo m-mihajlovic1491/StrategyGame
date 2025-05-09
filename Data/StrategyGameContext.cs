@@ -79,6 +79,9 @@ public partial class StrategyGameContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Hero__3214EC076E97809B");
 
+            entity.HasIndex(h => h.Name)
+                  .HasDatabaseName("IX_Hero_Name");
+
             entity.ToTable("Hero");
 
             entity.Property(e => e.Health)
