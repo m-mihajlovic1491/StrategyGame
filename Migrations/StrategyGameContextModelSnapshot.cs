@@ -125,6 +125,9 @@ namespace StrategyGame.Migrations
 
                     b.HasIndex("LegionId");
 
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_Hero_Name");
+
                     b.ToTable("Hero", (string)null);
                 });
 

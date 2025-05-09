@@ -12,7 +12,7 @@ using StrategyGame.Data;
 namespace StrategyGame.Migrations
 {
     [DbContext(typeof(StrategyGameContext))]
-    [Migration("20250509124255_AddIndexHeroName")]
+    [Migration("20250509125457_AddIndexHeroName")]
     partial class AddIndexHeroName
     {
         /// <inheritdoc />
@@ -127,6 +127,9 @@ namespace StrategyGame.Migrations
                     b.HasIndex("EquippedWeapon");
 
                     b.HasIndex("LegionId");
+
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_Hero_Name");
 
                     b.ToTable("Hero", (string)null);
                 });
