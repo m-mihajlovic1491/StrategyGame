@@ -12,7 +12,12 @@ namespace StrategyGame.Extensions
                 Guid = hero.Guid,
                 Id = hero.Id,
                 Name = hero.Name,
-                EquippedArmor = hero.EquippedArmor,
+                EquippedArmor = hero.EquippedArmor is null ? null : new ArmorViewModel
+                {
+                    Id = hero.EquippedArmorNavigation.Id,
+                    Name = hero.EquippedArmorNavigation.Name,
+                    DefensePercentage = hero.EquippedArmorNavigation.DefensePercentage
+                },
                 EquippedWeapon = hero.EquippedWeapon is null ? null : new WeaponViewModel
                 {
                     Id = hero.EquippedWeaponNavigation.Id,
@@ -23,7 +28,11 @@ namespace StrategyGame.Extensions
 
                 Health = hero.Health,
                 IsDead = hero.IsDead,
-                LegionId = hero.LegionId
+                Legion = hero.LegionId is null ? null : new LegionViewModel
+                {
+                    Id = hero.Legion.Id,
+                    Name = hero.Legion.Name,
+                }
             };
 
             

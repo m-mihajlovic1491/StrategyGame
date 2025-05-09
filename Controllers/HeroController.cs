@@ -28,6 +28,8 @@ public class HeroController : ControllerBase
     {
         var hero = _context.Heroes
             .Include(w => w.EquippedWeaponNavigation)
+            .Include(a=>a.EquippedArmorNavigation)
+            .Include(l=>l.Legion)
             .FirstOrDefault(x => x.Id == id);
 
 
