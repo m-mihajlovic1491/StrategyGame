@@ -15,7 +15,9 @@ namespace StrategyGame
 
             builder.Services.AddControllers();
             builder.Services.AddDbContext<StrategyGameContext>(o => o.UseSqlServer(
-                builder.Configuration.GetConnectionString("DatabaseConnection")));
+                builder.Configuration.GetConnectionString("DatabaseConnection"))
+                .EnableSensitiveDataLogging()
+                .LogTo(Console.WriteLine,LogLevel.Information));
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

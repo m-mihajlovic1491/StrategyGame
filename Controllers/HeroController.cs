@@ -108,5 +108,30 @@ public class HeroController : ControllerBase
 
     }
 
+    [HttpGet]
+    [Route("Heroes")]
+
+    public IActionResult GetAllheroes([FromQuery]int pageIndex,int pageSize, string? search) {
+        var heroesQuery = _context.Heroes
+            .Include(w => w.EquippedWeaponNavigation)
+            .Include(a => a.EquippedArmorNavigation)
+            .Include(l => l.Legion)            
+            .AsQueryable();
+
+        var searchTerm = search is null ? "" : search.ToLower().Trim();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            heroesQuery =heroesQuery.Where(x => x.Name.ToLower().Contains(searchTerm) ||
+                                                x.Legion.Name.ToLower().Contains(searchTerm));
+        }
+
+        var heroes = heroesQuery
+            .Skip(pageIndex * pageSize)
+            .Take(pageSize)
+            .ToList();
+        return Ok (heroes.Select(x => x.ToViewModel()));
+    }
+
 
 }
