@@ -77,4 +77,4 @@ jobs:
           app-name: 'Strategy-Game-prod'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ AZUREAPPSERVICE_PUBLISHPROFILE_1F7D02E7008D4A5AB923F21861E77CEB }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F7D02E7008D4A5AB923F21861E77CEB }}
