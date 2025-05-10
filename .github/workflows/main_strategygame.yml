@@ -59,7 +59,7 @@ jobs:
 
   deploy-prod:
     runs-on: windows-latest
-    needs: deploy-to-dev
+    needs: deploy-dev
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
