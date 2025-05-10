@@ -35,7 +35,7 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-  deploy:
+  deploy-dev:
     runs-on: windows-latest
     needs: build
     environment:
@@ -49,10 +49,32 @@ jobs:
           name: .net-app
       
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+        id: deploy-to-dev
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'StrategyGame'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F8A6C2CE030448198E4BD507962AAEDA }}
+
+  deploy-prod:
+    runs-on: windows-latest
+    needs: deploy-to-dev
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: .net-app
+      
+      - name: Deploy to Azure Web App
+        id: deploy-to-prod
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'Strategy-Game-prod'
+          slot-name: 'Production'
+          package: .
+          publish-profile: ${{ AZUREAPPSERVICE_PUBLISHPROFILE_1F7D02E7008D4A5AB923F21861E77CEB }}
