@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - StrategyGame
+name: Build and deploy ASP.Net Core app to Azure Web App - strategy-game
 
 on:
   push:
@@ -41,40 +41,58 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
       
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8CA70C79D9384F7E9EA6889B7E8B2700 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_602F4A838A224C71B497290EDA16AB3E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E43A219214BA4EE595FBE6E60F75EA71 }}
+
       - name: Deploy to Azure Web App
-        id: deploy-to-dev
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'StrategyGame'
+          app-name: 'strategy-game'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F8A6C2CE030448198E4BD507962AAEDA }}
-
   deploy-prod:
     runs-on: windows-latest
     needs: deploy-dev
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-    
+    permissions:
+      id-token: write #This is required for requesting the JWT
+      contents: read #This is required for actions/checkout
+
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: .net-app
       
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8CA70C79D9384F7E9EA6889B7E8B2700 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_602F4A838A224C71B497290EDA16AB3E }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E43A219214BA4EE595FBE6E60F75EA71 }}
+
       - name: Deploy to Azure Web App
-        id: deploy-to-prod
+        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Strategy-Game-prod'
+          app-name: 'strategy-game-prod'
           slot-name: 'Production'
           package: .
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F7D02E7008D4A5AB923F21861E77CEB }}
+          
