@@ -79,15 +79,8 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
-          name: .net-app
+          name: .net-app     
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8CA70C79D9384F7E9EA6889B7E8B2700 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_602F4A838A224C71B497290EDA16AB3E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E43A219214BA4EE595FBE6E60F75EA71 }}
-
       - name: Deploy to Azure Web App
         id: deploy-to-webapp-prod
         uses: azure/webapps-deploy@v3
@@ -95,4 +88,5 @@ jobs:
           app-name: 'strategy-game-prod'
           slot-name: 'Production'
           package: .
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1F7D02E7008D4A5AB923F21861E77CEB }}
           
