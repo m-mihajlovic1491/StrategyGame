@@ -70,7 +70,7 @@ jobs:
     needs: deploy-dev
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: ${{ steps.deploy-to-webapp-prod.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
       contents: read #This is required for actions/checkout
@@ -89,7 +89,7 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E43A219214BA4EE595FBE6E60F75EA71 }}
 
       - name: Deploy to Azure Web App
-        id: deploy-to-webapp
+        id: deploy-to-webapp-prod
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'strategy-game-prod'
