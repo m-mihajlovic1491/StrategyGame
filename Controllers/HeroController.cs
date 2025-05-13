@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,7 @@ using StrategyGame.Data;
 using StrategyGame.Extensions;
 using StrategyGame.Models;
 using StrategyGame.Requests;
+using StrategyGame.Validators;
 
 namespace StrategyGame.Controllers;
 
@@ -42,11 +44,13 @@ public class HeroController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateHero([FromBody] HeroRequest request)
+    public IActionResult CreateHero([FromBody] HeroRequest request, [FromServices] IValidator<HeroRequest> heroValidator )
     {
-        if (!ModelState.IsValid)
+        var validationResult = heroValidator.Validate(request);
+       
+        if (!validationResult.IsValid)
         {
-            return BadRequest(ModelState);
+            return BadRequest(validationResult.Errors);
         }
 
         var hero = new Hero
