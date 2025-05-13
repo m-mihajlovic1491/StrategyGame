@@ -48,6 +48,6 @@ namespace StrategyGame.Extensions
             };
 
 
-        }
+        }        
     }
 }
