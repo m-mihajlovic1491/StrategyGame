@@ -1,6 +1,9 @@
 
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using StrategyGame.Data;
+using StrategyGame.Models;
+using StrategyGame.Validators;
 using System;
 
 namespace StrategyGame
@@ -18,6 +21,9 @@ namespace StrategyGame
                 builder.Configuration.GetConnectionString("DatabaseConnection"))
                 .EnableSensitiveDataLogging()
                 .LogTo(Console.WriteLine,LogLevel.Information));
+
+            builder.Services.AddValidatorsFromAssemblyContaining<HeroValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<WeaponValidator>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
