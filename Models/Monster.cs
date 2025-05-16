@@ -10,4 +10,8 @@ public partial class Monster
     public Guid Guid { get; set; }
 
     public decimal Damage { get; set; }
+
+    public string Name { get; set; }
+
+    public decimal Defense { get; set; }
 }

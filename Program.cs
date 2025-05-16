@@ -24,6 +24,7 @@ namespace StrategyGame
 
             builder.Services.AddValidatorsFromAssemblyContaining<HeroValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<WeaponValidator>();
+            builder.Services.AddValidatorsFromAssemblyContaining<MonsterValidator>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

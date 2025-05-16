@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using StrategyGame.Data;
 using StrategyGame.Extensions;
 using StrategyGame.Models;
@@ -99,6 +100,36 @@ namespace StrategyGame.Controllers
             _context.SaveChanges();
 
             return NotFound($"weapon {weapon.Name} with id {weapon.Id} deleted succefully ");
+        }
+        [HttpPatch]
+        [Route("Weapon/")]
+
+        public IActionResult UpdateWeaponProperty([FromBody] WeaponPatchRequest patchDto, int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var weapon =_context.Weapons.Find(id);
+
+            if (weapon is null)
+            {
+                return NotFound("weapon does not exist");
+            }
+
+            if(!patchDto.Name.IsNullOrEmpty())
+            {
+                weapon.Name = patchDto.Name;
+            }
+
+            if (patchDto.Damage.HasValue)
+            {
+                weapon.Damage = patchDto.Damage.Value;
+            }
+
+            _context.SaveChanges();
+            return NoContent();
+
         }
 
     }
