@@ -14,4 +14,6 @@ public partial class Monster
     public string Name { get; set; }
 
     public decimal Defense { get; set; }
+
+    public decimal Health { get; set; } = 100;
 }

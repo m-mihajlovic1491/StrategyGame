@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using StrategyGame.Data;
 using StrategyGame.Models;
+using StrategyGame.Services;
 using StrategyGame.Validators;
 using System;
 
@@ -25,6 +26,7 @@ namespace StrategyGame
             builder.Services.AddValidatorsFromAssemblyContaining<HeroValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<WeaponValidator>();
             builder.Services.AddValidatorsFromAssemblyContaining<MonsterValidator>();
+            builder.Services.AddTransient<IBattleService,BattleService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
