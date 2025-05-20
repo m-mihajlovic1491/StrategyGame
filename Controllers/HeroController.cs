@@ -6,6 +6,7 @@ using StrategyGame.Data;
 using StrategyGame.Extensions;
 using StrategyGame.Models;
 using StrategyGame.Requests;
+using StrategyGame.Services;
 using StrategyGame.Validators;
 
 namespace StrategyGame.Controllers;
@@ -16,12 +17,12 @@ public class HeroController : ControllerBase
 {
     public StrategyGameContext _context { get; set; }
 
-    private readonly ILogger<HeroController> _logger;
+    private readonly ILogger<HeroController> _logger;    
 
-    public HeroController(ILogger<HeroController> logger, StrategyGameContext context)
+    public HeroController(ILogger<HeroController> logger, StrategyGameContext context, IBattleService battle)
     {
         _logger = logger;
-        _context = context;
+        _context = context;      
     }
 
     [HttpGet]
@@ -88,7 +89,7 @@ public class HeroController : ControllerBase
     public IActionResult AddWeaponToHero([FromRoute] int heroId, int weaponId)
     {
         var hero = _context.Heroes.FirstOrDefault(h => h.Id == heroId);
-        var weapon = _context.Heroes.FirstOrDefault(w => w.Id == weaponId);
+        var weapon = _context.Weapons.FirstOrDefault(w => w.Id == weaponId);
 
         if (hero is null)
         {
@@ -135,6 +136,40 @@ public class HeroController : ControllerBase
             .Take(pageSize)
             .ToList();
         return Ok (heroes.Select(x => x.ToViewModel()));
+    }
+
+    [HttpPost]
+    [Route("/battle/{heroId}/{monsterId}")]
+
+    public IActionResult Battle([FromRoute] int heroId, int monsterId,
+                                [FromServices] IBattleService battle)
+    {
+        var hero = _context.Heroes
+            .Include(x=>x.EquippedArmorNavigation)
+            .Include(x=>x.EquippedWeaponNavigation)
+            .FirstOrDefault(h => h.Id == heroId);
+        var monster = _context.Monsters.FirstOrDefault(m => m.Id == monsterId);
+
+        if (hero is null)
+        {
+            return NotFound("Hero not found");
+        }
+
+        if (monster is null)
+        {
+            return NotFound("Monster not found");
+        }
+        
+
+        var healthAfterBattle = battle.Battle(hero, monster);
+
+        hero.Health = healthAfterBattle.HeroHealth;
+        monster.Health = healthAfterBattle.MonsterHealth;
+
+        _context.SaveChanges();
+
+        return Ok($"Battle ended.\n Hero health: {hero.Health}\n Monster health: {monster.Health}");
+
     }
 
 
